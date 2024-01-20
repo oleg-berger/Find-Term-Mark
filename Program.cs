@@ -16,10 +16,11 @@ namespace ConsoleApp1
             public int userMark { get; private set; }
             public int maxMark { get; private set; }
 
-            public Mark (int userMarks, int maxMarks)
+            public Mark(int userMarks, int maxMarks)
             {
                 userMark = userMarks;
                 maxMark = maxMarks;
             }
+        }
     }
 }
