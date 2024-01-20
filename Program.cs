@@ -13,7 +13,13 @@ namespace ConsoleApp1
         }
         class Mark
         {
+            public int userMark { get; private set; }
+            public int maxMark { get; private set; }
 
-        }
+            public Mark (int userMarks, int maxMarks)
+            {
+                userMark = userMarks;
+                maxMark = maxMarks;
+            }
     }
 }
