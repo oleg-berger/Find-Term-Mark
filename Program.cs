@@ -10,6 +10,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            Mark forTerm = new Mark(10, 15);
         }
         class Mark
         {
