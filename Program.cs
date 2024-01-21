@@ -10,8 +10,30 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Console.Write("Введите оценку за СОР");
-            int[] userForUnit = EnterMark();
+            Console.Write("Введите оценку за СОР ");
+            int[] userForUnit = EnterMark();     
+            Console.Write("Введите оценку за СОЧ ");
+            int[] userForTerm = EnterMark();
+            Console.Write("Введите оценку за ФО ");
+            int[] userFA = EnterMark(); // FA -- its mean Formative Assessment
+
+
+            Console.Write("Введите максимальный балл за СОР ");
+            int[] maxMarkForUnit = EnterMark();             
+            Console.Write("Введите максимальный балл за СОЧ ");
+            int[] maxMarkForTerm = EnterMark();
+
+            int[] maxFA = new int[userFA.Length];
+            for (int i = 0; i < userFA.Length; i++)
+            {
+                maxFA[i] = 10;
+            }
+
+
+
+            Mark forUnit = new Mark(userForUnit, maxMarkForUnit);
+            Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
+            Mark FA = new Mark(userFA, maxFA);
         }
          
         static int[] EnterMark()
