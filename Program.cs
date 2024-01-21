@@ -35,8 +35,10 @@ namespace ConsoleApp1
             Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
             Mark FA = new Mark(userFA, maxFA);
 
-            
+                               
+            float finalMark = forUnit.SumAVGMark(FA, forTerm);
 
+            Console.WriteLine(finalMark.ToString("F1"));
         }
 
 
@@ -60,10 +62,15 @@ namespace ConsoleApp1
         public int[] userMark { get; private set; }
         public int[] maxMark { get; private set; }
 
+        
+
         public Mark(int[] userMarks, int[] maxMarks)
         {
             userMark = userMarks;
             maxMark = maxMarks;
+
+            if (userMarks.Length != maxMarks.Length)
+                throw new ArgumentException("Ошибка: вы ввели разное количество оценок, попробуйте снова");
         }
 
         public void ShowMark()
@@ -79,10 +86,38 @@ namespace ConsoleApp1
             Console.WriteLine("\n");
         }
 
-        /*  public static void SumMark(Mark forUnit, Mark forTerm, Mark FA)
-          {
-              int termMark = 
-          }*/
+        public float SumAVGMark(Mark foMark, Mark forTerm)
+        {
+            int sumUserMarkForUnit = SumMark(userMark);
+
+            int sumMaxMarkForUnit = SumMark(maxMark);
+
+            int sumFOUsermark = SumMark(foMark.userMark);
+
+            int sumMaxFOMark = SumMark(foMark.maxMark);
+
+            int forTermUserSum = SumMark(forTerm.userMark);
+
+            int forTermMAXSum = SumMark(forTerm.maxMark);
+
+            //double AVGMark = (double)(sumUserMarkForUnit + sumFOUsermark) / (sumMaxMarkForUnit + sumMaxFOMark)) * 50 + (double)forTermUserSum / forTermMAXSum * 50;
+            float AVGMark = ((float)(sumUserMarkForUnit + sumFOUsermark) / (sumMaxMarkForUnit + sumMaxFOMark)) * 50 + (float)forTermUserSum / forTermMAXSum * 50;
+
+
+            return AVGMark;
+
+        }
+
+        public static int SumMark(int[] ranked)
+        {
+            int sumMarks = 0;
+            for (int i = 0; i < ranked.Length; i++)
+            {
+                sumMarks += ranked[i];
+            }
+
+            return sumMarks;
+        }
 
     }
 }
