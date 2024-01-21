@@ -11,7 +11,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Console.Write("Введите оценку за СОР ");
-            int[] userForUnit = EnterMark();     
+            int[] userForUnit = EnterMark();
             Console.Write("Введите оценку за СОЧ ");
             int[] userForTerm = EnterMark();
             Console.Write("Введите оценку за ФО ");
@@ -19,7 +19,7 @@ namespace ConsoleApp1
 
 
             Console.Write("Введите максимальный балл за СОР ");
-            int[] maxMarkForUnit = EnterMark();             
+            int[] maxMarkForUnit = EnterMark();
             Console.Write("Введите максимальный балл за СОЧ ");
             int[] maxMarkForTerm = EnterMark();
 
@@ -34,32 +34,55 @@ namespace ConsoleApp1
             Mark forUnit = new Mark(userForUnit, maxMarkForUnit);
             Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
             Mark FA = new Mark(userFA, maxFA);
+
+            
+
         }
-         
+
+
         static int[] EnterMark()
         {
             string strArray = Console.ReadLine();
             string[] strArray2 = strArray.Split(' ');
             int[] marks = new int[strArray2.Length];
 
-            for(int i = 0; i < marks.Length; i++)
+            for (int i = 0; i < marks.Length; i++)
             {
                 marks[i] = Convert.ToInt32(strArray2[i]);
             }
 
             return marks;
-        }
 
         }
     }
-        class Mark
-        {
-            public int[] userMark { get; private set; }
-            public int[] maxMark { get; private set; }
+    class Mark
+    {
+        public int[] userMark { get; private set; }
+        public int[] maxMark { get; private set; }
 
-            public Mark(int[] userMarks, int[] maxMarks)
-            {
-                userMark = userMarks;
-                maxMark = maxMarks;
-            }
+        public Mark(int[] userMarks, int[] maxMarks)
+        {
+            userMark = userMarks;
+            maxMark = maxMarks;
+        }
+
+        public void ShowMark()
+        {
+            foreach (int mark in userMark)
+                Console.Write(mark + " ");
+
+            Console.WriteLine("\n");
+
+            foreach (int mark in maxMark)
+                Console.Write(mark + " ");
+
+            Console.WriteLine("\n");
+        }
+
+        /*  public static void SumMark(Mark forUnit, Mark forTerm, Mark FA)
+          {
+              int termMark = 
+          }*/
+
+    }
 }
