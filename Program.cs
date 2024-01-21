@@ -10,18 +10,34 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Mark forTerm = new Mark(10, 15);
+            Console.Write("Введите оценку за СОР");
+            int[] userForUnit = EnterMark();
         }
+         
+        static int[] EnterMark()
+        {
+            string strArray = Console.ReadLine();
+            string[] strArray2 = strArray.Split(' ');
+            int[] marks = new int[strArray2.Length];
+
+            for(int i = 0; i < marks.Length; i++)
+            {
+                marks[i] = Convert.ToInt32(strArray2[i]);
+            }
+
+            return marks;
+        }
+
+        }
+    }
         class Mark
         {
-            public int userMark { get; private set; }
-            public int maxMark { get; private set; }
+            public int[] userMark { get; private set; }
+            public int[] maxMark { get; private set; }
 
-            public Mark(int userMarks, int maxMarks)
+            public Mark(int[] userMarks, int[] maxMarks)
             {
                 userMark = userMarks;
                 maxMark = maxMarks;
             }
-        }
-    }
 }
