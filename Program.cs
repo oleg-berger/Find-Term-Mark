@@ -17,25 +17,35 @@ namespace ConsoleApp1
             Console.Write("Введите оценку за ФО ");
             int[] userFA = EnterMark(); // FA -- its mean Formative Assessment
 
-
-            Console.Write("Введите максимальный балл за СОР ");
-            int[] maxMarkForUnit = EnterMark();
-            Console.Write("Введите максимальный балл за СОЧ ");
-            int[] maxMarkForTerm = EnterMark();
-
             int[] maxFA = new int[userFA.Length];
             for (int i = 0; i < userFA.Length; i++)
             {
                 maxFA[i] = 10;
             }
 
+            Mark FA = new Mark(userFA, maxFA);
+            FA.CheckRightNum();
 
+
+            Console.Write("Введите максимальный балл за СОР ");
+            int[] maxMarkForUnit = EnterMark();
 
             Mark forUnit = new Mark(userForUnit, maxMarkForUnit);
-            Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
-            Mark FA = new Mark(userFA, maxFA);
+            forUnit.CheckRightNum();
 
-                               
+
+
+            Console.Write("Введите максимальный балл за СОЧ ");
+            int[] maxMarkForTerm = EnterMark();
+
+            Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
+            forTerm.CheckRightNum();
+
+
+
+
+
+
             float finalMark = forUnit.SumAVGMark(FA, forTerm);
 
             Console.WriteLine(finalMark.ToString("F1"));
@@ -45,13 +55,47 @@ namespace ConsoleApp1
         static int[] EnterMark()
         {
             string strArray = Console.ReadLine();
-            string[] strArray2 = strArray.Split(' ');
+
+            if (string.IsNullOrWhiteSpace(strArray))
+            {
+                Console.WriteLine("Ошибка: введена пустая строка");
+                Environment.Exit(0);
+            }
+
+
+            char[] separators = { ' ', ',', '|', ':', ';', '.' }; 
+
+            string[] strArray2 = strArray.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+
+
             int[] marks = new int[strArray2.Length];
 
-            for (int i = 0; i < marks.Length; i++)
+
+            try
             {
-                marks[i] = Convert.ToInt32(strArray2[i]);
+                for (int i = 0; i < marks.Length; i++)
+                {
+                    marks[i] = Convert.ToInt32(strArray2[i]);
+                }
+
             }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ошибка: Введена строка а не число пожалуйста повторите попытку");
+                Environment.Exit(0);
+            }
+
+            for (int k = 0; k < marks.Length; k++)
+            {
+                if (marks[k] > 40 || marks[k] < 0)
+                {
+                    Console.WriteLine("Ошибка: Введено недопустимое значение, пожалуйста введите числа в диапозоне от 0 до 40");
+                    Environment.Exit(0);
+                }
+            }
+
+
 
             return marks;
 
@@ -62,15 +106,13 @@ namespace ConsoleApp1
         public int[] userMark { get; private set; }
         public int[] maxMark { get; private set; }
 
-        
+
 
         public Mark(int[] userMarks, int[] maxMarks)
         {
             userMark = userMarks;
             maxMark = maxMarks;
 
-            if (userMarks.Length != maxMarks.Length)
-                throw new ArgumentException("Ошибка: вы ввели разное количество оценок, попробуйте снова");
         }
 
         public void ShowMark()
@@ -100,7 +142,12 @@ namespace ConsoleApp1
 
             int forTermMAXSum = SumMark(forTerm.maxMark);
 
-            //double AVGMark = (double)(sumUserMarkForUnit + sumFOUsermark) / (sumMaxMarkForUnit + sumMaxFOMark)) * 50 + (double)forTermUserSum / forTermMAXSum * 50;
+            if (sumMaxMarkForUnit + sumMaxFOMark == 0)
+            {
+                Console.WriteLine("Ошибка: Сумма максимальных баллов равна нулю. Невозможно выполнить деление.");
+                Environment.Exit(0);
+            }
+
             float AVGMark = ((float)(sumUserMarkForUnit + sumFOUsermark) / (sumMaxMarkForUnit + sumMaxFOMark)) * 50 + (float)forTermUserSum / forTermMAXSum * 50;
 
 
@@ -118,6 +165,30 @@ namespace ConsoleApp1
 
             return sumMarks;
         }
+
+        public void CheckRightNum()
+        {
+
+            if (userMark.Length != maxMark.Length)
+            {
+                Console.WriteLine("Ошибка: вы ввели разное количество оценок, попробуйте снова");
+                Environment.Exit(0);
+            }
+
+
+            for (int i = 0; i < userMark.Length; i++)
+            {
+                if (userMark[i] > maxMark[i])
+                {
+                    Console.WriteLine("Ошибка: ваша оценка выше максимальной");
+                    Environment.Exit(0);
+                }
+
+            }
+
+        }
+
+
 
     }
 }
