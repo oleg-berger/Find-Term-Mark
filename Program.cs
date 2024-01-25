@@ -10,6 +10,14 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            DataBase dataBase = new DataBase();
+
+            string userName;
+
+            Console.Write("Введите ваше имя ");
+
+            userName = Console.ReadLine();
+
             Console.Write("Введите оценку за СОР ");
             int[] userForUnit = EnterMark();
             Console.Write("Введите оценку за СОЧ ");
@@ -49,6 +57,12 @@ namespace ConsoleApp1
             float finalMark = forUnit.SumAVGMark(FA, forTerm);
 
             Console.WriteLine(finalMark.ToString("F1"));
+
+            int totalMark = (int)finalMark;
+
+            int userID = 1;
+            forTerm.InsertMarkIntoDatabase(dataBase, userID, userName, userForTerm, userForUnit, userFA, (int)finalMark);
+
         }
 
 
@@ -100,6 +114,8 @@ namespace ConsoleApp1
             return marks;
 
         }
+
+
     }
     class Mark
     {
@@ -113,6 +129,29 @@ namespace ConsoleApp1
             userMark = userMarks;
             maxMark = maxMarks;
 
+        }
+       
+
+        public void InsertMarkIntoDatabase(DataBase dataBase, int userID,string userName, int[] userForTerm, int[] userForUnit, int[] userFA, int finalMark)
+        {
+            string strForTerm = StringToInt(userForTerm);
+            string strForUnit = StringToInt(userForUnit);
+            string strForFA = StringToInt(userFA);
+            dataBase.InsertMark(userID, userName, strForTerm, strForUnit, strForFA, finalMark);
+        }
+
+
+        static public string StringToInt(int[] nums)
+        {
+            StringBuilder strNum = new StringBuilder();
+            for(int i = 0; i < nums.Length; i++)
+            {
+                strNum.Append(nums[i].ToString());
+                if (i < nums.Length - 1)
+                    strNum.Append(' ');
+            }
+
+            return strNum.ToString();
         }
 
         public void ShowMark()
@@ -187,7 +226,6 @@ namespace ConsoleApp1
             }
 
         }
-
 
 
     }
