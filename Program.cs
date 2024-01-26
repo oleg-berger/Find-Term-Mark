@@ -10,59 +10,117 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            DataBase dataBase = new DataBase();
 
-            string userName;
+            bool isOpen = true;
 
-            Console.Write("Введите ваше имя ");
-
-            userName = Console.ReadLine();
-
-            Console.Write("Введите оценку за СОР ");
-            int[] userForUnit = EnterMark();
-            Console.Write("Введите оценку за СОЧ ");
-            int[] userForTerm = EnterMark();
-            Console.Write("Введите оценку за ФО ");
-            int[] userFA = EnterMark(); // FA -- its mean Formative Assessment
-
-            int[] maxFA = new int[userFA.Length];
-            for (int i = 0; i < userFA.Length; i++)
+            while (isOpen)
             {
-                maxFA[i] = 10;
+
+                Console.Clear();
+                Console.SetCursorPosition(0, 25);
+
+                Console.WriteLine("Добро пожаловать в программу для расчета оценки за четверть");
+                Console.WriteLine("1 - расчет оценок   2 - мои оценки  3 - выход");
+
+                string userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out int choice))
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.SetCursorPosition(0, 0);
+
+                            DataBase dataBase = new DataBase();
+                            string userName;
+
+                            Console.Write("Введите ваше имя ");
+
+                            userName = Console.ReadLine();
+
+                            Console.Write("Введите оценку за СОР ");
+                            int[] userForUnit = EnterMark();
+                            
+                            Console.Write("Введите оценку за СОЧ ");
+                            int[] userForTerm = EnterMark();
+                            Console.Write("Введите оценку за ФО ");
+                            int[] userFA = EnterMark(); // FA -- its mean Formative Assessment
+
+                            int[] maxFA = new int[userFA.Length];
+                            for (int i = 0; i < userFA.Length; i++)
+                            {
+                                maxFA[i] = 10;
+                            }
+
+                            Mark FA = new Mark(userFA, maxFA);
+                            FA.CheckRightNum();
+
+                            
+                            Console.Write("Введите максимальный балл за СОР ");
+                            int[] maxMarkForUnit = EnterMark();
+
+                            Mark forUnit = new Mark(userForUnit, maxMarkForUnit);
+                            forUnit.CheckRightNum();
+
+
+
+                            Console.Write("Введите максимальный балл за СОЧ ");
+                            int[] maxMarkForTerm = EnterMark();
+
+                            Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
+                            forTerm.CheckRightNum();
+
+
+
+
+
+
+                            float finalMark = forUnit.SumAVGMark(FA, forTerm);
+
+                            Console.WriteLine(finalMark.ToString("F1"));
+
+                            int totalMark = (int)finalMark;
+
+
+                            forTerm.InsertMarkIntoDatabase(dataBase, userName, userForUnit, maxMarkForUnit, userFA, userForTerm, maxMarkForTerm, (int)finalMark);
+
+                            int userId = dataBase.GetUserId(userName);
+
+                            if (userId != -1)
+                                Console.WriteLine("Добавлен новый пользователь с id: " + userId);
+                            else
+                                Console.WriteLine("Не удалось получить id нового пользователя.");
+
+
+
+                            Console.ReadKey();
+
+                            break;
+
+                        case 2:
+
+                            break;
+
+                        case 3:
+
+                            break;
+
+                        default:
+                            Console.WriteLine("Ошибка: Введено не верное значение");
+                            break;
+
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ошибка: Введено недопустимое значение");
+                    break;
+                }
+
+
+
+
             }
-
-            Mark FA = new Mark(userFA, maxFA);
-            FA.CheckRightNum();
-
-
-            Console.Write("Введите максимальный балл за СОР ");
-            int[] maxMarkForUnit = EnterMark();
-
-            Mark forUnit = new Mark(userForUnit, maxMarkForUnit);
-            forUnit.CheckRightNum();
-
-
-
-            Console.Write("Введите максимальный балл за СОЧ ");
-            int[] maxMarkForTerm = EnterMark();
-
-            Mark forTerm = new Mark(userForTerm, maxMarkForTerm);
-            forTerm.CheckRightNum();
-
-
-
-
-
-
-            float finalMark = forUnit.SumAVGMark(FA, forTerm);
-
-            Console.WriteLine(finalMark.ToString("F1"));
-
-            int totalMark = (int)finalMark;
-
-            
-            forTerm.InsertMarkIntoDatabase(dataBase, userName, userForUnit, maxMarkForUnit, userFA, userForTerm, maxMarkForTerm, (int)finalMark);
-
         }
 
 
@@ -77,7 +135,7 @@ namespace ConsoleApp1
             }
 
 
-            char[] separators = { ' ', ',', '|', ':', ';', '.' }; 
+            char[] separators = { ' ', ',', '|', ':', ';', '.' };
 
             string[] strArray2 = strArray.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
@@ -149,13 +207,13 @@ namespace ConsoleApp1
             dataBase.InsertMark(userName, strUserForUnit, maxStrForUnit, strUserForFA, strUserForTerm, maxStrForTerm, totalMark);
 
         }
-    
-        
+
+
 
         static public string StringToInt(int[] nums)
         {
             StringBuilder strNum = new StringBuilder();
-            for(int i = 0; i < nums.Length; i++)
+            for (int i = 0; i < nums.Length; i++)
             {
                 strNum.Append(nums[i].ToString());
                 if (i < nums.Length - 1)

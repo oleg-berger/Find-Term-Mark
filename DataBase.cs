@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ConsoleApp1
 {
@@ -39,7 +40,7 @@ namespace ConsoleApp1
             {
                 OpenConnection();
 
-                
+
                 string insertMarkQuery = "INSERT INTO users_and_mark (userName, forUnit, maxForUnit, forFA, forTerm, maxForTerm, totalMark) VALUES (@userName, @forUnit, @maxForUnit, @forFA, @forTerm, @maxForTerm, @totalMark)";
                 using (SqlCommand command = new SqlCommand(insertMarkQuery, sqlConnection))
                 {
@@ -62,10 +63,40 @@ namespace ConsoleApp1
             {
                 LoseConnection();
             }
+
+
         }
 
 
+    public int GetUserId(string userName)
+    {
+        try
+        {
+            OpenConnection();
+
+            string getUserIdQuery = "SELECT id FROM users_and_mark WHERE userName = @userName";
+
+            using (SqlCommand command = new SqlCommand(getUserIdQuery, sqlConnection))
+            {
+                command.Parameters.AddWithValue("@userName", userName);
+
+                var result = command.ExecuteScalar();
+                return result == null ? -1 : Convert.ToInt32(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при получении id пользователя: " + ex.Message);
+            return -1; // Возвращаем -1 в случае ошибки
+        }
+        finally
+        {
+            LoseConnection();
+        }
     }
+
+    }
+
 
 
 
