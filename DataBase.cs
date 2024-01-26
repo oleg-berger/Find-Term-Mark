@@ -33,35 +33,26 @@ namespace ConsoleApp1
         }
 
 
-        public void InsertMark(int userID, string userName, string forTerm, string forUnit, string forFA, int totalMark)
+        public void InsertMark(string userName, string forUnit, string maxForUnit, string forFA, string forTerm, string maxForTerm, int totalMark)
         {
             try
             {
                 OpenConnection();
 
-                // Проверка наличия userID в таблице users
-                string checkUserQuery = "SELECT COUNT(*) FROM users WHERE id = @userID";
-                using (SqlCommand checkUserCommand = new SqlCommand(checkUserQuery, sqlConnection))
-                {
-                    checkUserCommand.Parameters.AddWithValue("@userID", userID);
-                    int userCount = (int)checkUserCommand.ExecuteScalar();
-
-                    
-                }
-
-                // Вставка данных в таблицу mark
-                string insertMarkQuery = "INSERT INTO mark (userName, forTerm, forUnit, forFA, totalMark) VALUES (@userName, @forTerm, @forUnit, @forFA, @totalMark)";
+                
+                string insertMarkQuery = "INSERT INTO users_and_mark (userName, forUnit, maxForUnit, forFA, forTerm, maxForTerm, totalMark) VALUES (@userName, @forUnit, @maxForUnit, @forFA, @forTerm, @maxForTerm, @totalMark)";
                 using (SqlCommand command = new SqlCommand(insertMarkQuery, sqlConnection))
                 {
                     command.Parameters.AddWithValue("@userName", userName);
-                    command.Parameters.AddWithValue("@forTerm", forTerm);
                     command.Parameters.AddWithValue("@forUnit", forUnit);
+                    command.Parameters.AddWithValue("@maxForUnit", maxForUnit);
                     command.Parameters.AddWithValue("@forFA", forFA);
+                    command.Parameters.AddWithValue("@forTerm", forTerm);
+                    command.Parameters.AddWithValue("@maxForTerm", maxForTerm);
                     command.Parameters.AddWithValue("@totalMark", totalMark);
 
                     command.ExecuteNonQuery();
                 }
-
             }
             catch (Exception ex)
             {

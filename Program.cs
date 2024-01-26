@@ -60,8 +60,8 @@ namespace ConsoleApp1
 
             int totalMark = (int)finalMark;
 
-            int userID = 1;
-            forTerm.InsertMarkIntoDatabase(dataBase, userID, userName, userForTerm, userForUnit, userFA, (int)finalMark);
+            
+            forTerm.InsertMarkIntoDatabase(dataBase, userName, userForUnit, maxMarkForUnit, userFA, userForTerm, maxMarkForTerm, (int)finalMark);
 
         }
 
@@ -130,16 +130,27 @@ namespace ConsoleApp1
             maxMark = maxMarks;
 
         }
-       
 
-        public void InsertMarkIntoDatabase(DataBase dataBase, int userID,string userName, int[] userForTerm, int[] userForUnit, int[] userFA, int finalMark)
+
+        
+
+        public void InsertMarkIntoDatabase(DataBase dataBase, string userName, int[] forUnit, int[] maxForUnit, int[] forFa, int[] forTerm, int[] maxForTerm, int totalMark)
         {
-            string strForTerm = StringToInt(userForTerm);
-            string strForUnit = StringToInt(userForUnit);
-            string strForFA = StringToInt(userFA);
-            dataBase.InsertMark(userID, userName, strForTerm, strForUnit, strForFA, finalMark);
-        }
+            string strUserForUnit = StringToInt(forUnit);
 
+            string maxStrForUnit = StringToInt(maxForUnit);
+
+            string strUserForFA = StringToInt(forFa);
+
+            string strUserForTerm = StringToInt(forTerm);
+
+            string maxStrForTerm = StringToInt(maxForTerm);
+
+            dataBase.InsertMark(userName, strUserForUnit, maxStrForUnit, strUserForFA, strUserForTerm, maxStrForTerm, totalMark);
+
+        }
+    
+        
 
         static public string StringToInt(int[] nums)
         {
